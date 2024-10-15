@@ -1,0 +1,31 @@
+{
+  "name": "resolution/drakkar",
+  "description": "Drakkar",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Drakkar\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Vladamir Mukashev"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=8.3",
+    "slim/slim": "4.*",
+    "slim/psr7": "^1.7"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "phpstan/phpstan": "^1.12",
+    "phpunit/phpunit": "^11"
+  },
+  "scripts": {
+    "inspect": "vendor/bin/phpstan analyse -l 6 app tests",
+    "test": "vendor/bin/phpunit tests"
+  }
+}

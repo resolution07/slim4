@@ -1,0 +1,47 @@
+services:
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php-fpm/log:/var/log/php
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php-fpm/conf.d:/usr/local/etc/php/conf.d
+    networks:
+      - drakkar
+  nginx:
+    build:
+      context: ./docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/log:/var/log/nginx
+      - ./docker/nginx/config:/etc/nginx/conf.d
+    links:
+      - php-fpm
+    networks:
+      - drakkar
+  db:
+    build:
+      context: ./docker/mysql
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    depends_on:
+      - php-fpm
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - drakkar
+
+networks:
+  drakkar:
+    driver: bridge
